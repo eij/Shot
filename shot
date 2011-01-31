@@ -1,0 +1,38 @@
+#!/bin/bash
+
+VERSION="1.0"
+
+type -P scrot &>/dev/null || { echo "Scrot is missing, install it." >&2; exit 1; }
+type -P tell &>/dev/null || { echo "Tell is missing, install it." >&2; exit 1; }
+
+SHOT_FOLDER="$HOME/"
+SHOT_FILE="`date +%s%N`.png"
+
+while getopts  "hn:" OPT
+do
+	case $OPT in
+
+	n)
+		if [ `echo $OPTARG | grep ".png$"` ]; then
+			SHOT_FILE=$OPTARG
+		else
+			SHOT_FILE=$OPTARG.png
+		fi
+		;;
+	h)
+		echo "Usage: shot [OPTIONS]"
+		echo
+		echo "   -n <name>		location and name"
+		echo "   -h			display this help"
+
+		exit 0
+		;;
+
+	esac
+done
+
+clear
+tell
+scrot -d1 $SHOT_FOLDER$SHOT_FILE
+
+exit 0
